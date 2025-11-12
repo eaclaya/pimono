@@ -18,11 +18,11 @@ const props = defineProps({
   },
   error: {
     type: String,
-    default: '',
+    default: null,
   },
   success: {
     type: String,
-    default: '',
+    default: null,
   },
 })
 
