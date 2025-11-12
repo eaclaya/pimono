@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $now = now();
         $user = User::firstOrCreate([
                 'email' => 'admin@example.com',
             ],
@@ -27,6 +28,20 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('password'),
         ]);
 
-        User::factory(100)->create();
+        foreach (range(1, 100) as $i) {
+            $transactions = [];
+            for ($j = 1; $j <= 1000; $j++) {
+                $transactions[] = [
+                    'sender_id' => $i,
+                    'receiver_id' => $j,
+                    'amount' => fake()->randomFloat(4, 1, 100),
+                    'commission_fee' => fake()->randomFloat(4, 0, 1),
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                ];
+            }
+            Transaction::insert($transactions);
+        }
+
     }
 }

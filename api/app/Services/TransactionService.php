@@ -62,6 +62,8 @@ class TransactionService
                     'commission_fee' => $commission,
                 ]);
 
+                $transaction->load(['sender:id,name,email', 'receiver:id,name,email']);
+
                 event(new TransactionCreated($transaction));
 
                 return $transaction;
