@@ -1,9 +1,25 @@
 import { computed, ref } from 'vue'
-import http, { clearAuthToken, setAuthToken } from '../services/http'
+import http, { clearAuthToken, setAuthToken } from '@/services/http'
 
 const STORAGE_KEY = 'token'
 const USER_STORAGE_KEY = 'user'
-const LOGIN_ENDPOINT = import.meta.env?.VITE_LOGIN_ENDPOINT ?? '/auth/login'
+
+
+const getStoredToken = () => {
+  if (typeof window === 'undefined') return ''
+  return window.localStorage.getItem(STORAGE_KEY) ?? ''
+}
+
+const getStoredUser = () => {
+  if (typeof window === 'undefined') return null
+  try {
+    const stored = window.localStorage.getItem(USER_STORAGE_KEY)
+    return stored ? JSON.parse(stored) : null
+  } catch (error) {
+    console.error('Failed to parse stored user data:', error)
+    return null
+  }
+}
 
 const token = ref(getStoredToken())
 const user = ref(getStoredUser())
@@ -17,44 +33,29 @@ if (token.value) {
 
 const isAuthenticated = computed(() => Boolean(token.value))
 
-function getStoredToken() {
-  if (typeof window === 'undefined') return ''
-  return window.localStorage.getItem(STORAGE_KEY) ?? ''
-}
 
-function getStoredUser() {
-  if (typeof window === 'undefined') return null
-  try {
-    const stored = window.localStorage.getItem(USER_STORAGE_KEY)
-    return stored ? JSON.parse(stored) : null
-  } catch (error) {
-    console.error('Failed to parse stored user data:', error)
-    return null
-  }
-}
-
-function persistToken(value) {
+const persistToken = (value) => {
   if (typeof window === 'undefined') return
   window.localStorage.setItem(STORAGE_KEY, value)
 }
 
-function persistUser(userData) {
+const persistUser = (userData) => {
   if (typeof window === 'undefined') return
   if (!userData) return
   window.localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(userData))
 }
 
-function clearStoredToken() {
+const clearStoredToken = () => {
   if (typeof window === 'undefined') return
   window.localStorage.removeItem(STORAGE_KEY)
 }
 
-function clearStoredUser() {
+const clearStoredUser = () => {
   if (typeof window === 'undefined') return
   window.localStorage.removeItem(USER_STORAGE_KEY)
 }
 
-function setToken(value) {
+const setToken = (value) => {
   token.value = value
   if (value) {
     persistToken(value)
@@ -65,7 +66,7 @@ function setToken(value) {
   clearAuthToken()
 }
 
-async function login({ email, password }) {
+const login = async ({ email, password }) => {
   if (loginLoading.value) return false
 
   loginError.value = ''
@@ -73,15 +74,7 @@ async function login({ email, password }) {
   loginLoading.value = true
 
   try {
-    const response = await http.post(
-      LOGIN_ENDPOINT,
-      { email, password },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      },
-    )
+    const response = await http.post('/auth/login', { email, password })
 
     const payload = response.data ?? {}
     const receivedToken = extractToken(payload)
@@ -110,7 +103,7 @@ async function login({ email, password }) {
   }
 }
 
-function updateUser(updates) {
+const updateUser = (updates) => {
   if (!user.value) return
 
   const updatedUser = {
@@ -122,7 +115,7 @@ function updateUser(updates) {
   persistUser(updatedUser)
 }
 
-function logout() {
+const logout = () => {
   setToken('')
   user.value = null
   clearStoredUser()
@@ -130,18 +123,18 @@ function logout() {
   loginError.value = ''
 }
 
-function extractToken(payload) {
+const extractToken = (payload) => {
   if (!payload) return ''
   return payload.token ?? payload.access_token ?? payload?.data?.token ?? ''
 }
 
-function extractUser(payload) {
+const extractUser = (payload) => {
   if (!payload) return null
   // Check for user object in various possible locations
   return payload.user ?? payload?.data?.user ?? null
 }
 
-function extractAxiosMessage(error, fallback) {
+const extractAxiosMessage = (error, fallback) => {
   if (error?.response?.data?.message) return error.response.data.message
   if (error?.response?.data?.error) return error.response.data.error
   if (typeof error?.message === 'string' && error.message.length > 0) return error.message

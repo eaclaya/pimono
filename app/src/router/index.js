@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import useAuth from '../composables/useAuth'
 
-const HomeView = () => import('../Home.vue')
+const HomeView = () => import('../views/HomeView.vue')
 const LoginView = () => import('../views/LoginView.vue')
 
 const router = createRouter({

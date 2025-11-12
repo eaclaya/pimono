@@ -1,6 +1,6 @@
 import { computed, reactive, ref, watch } from 'vue'
-import http from '../services/http'
-import useAuth from './useAuth'
+import http from '@/services/http'
+import useAuth from '@/composables/useAuth'
 
 const recipients = ref([])
 const recipientsLoading = ref(false)

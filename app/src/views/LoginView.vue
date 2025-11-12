@@ -1,8 +1,8 @@
 <script setup>
 import { computed, reactive } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import LoginForm from '../components/LoginForm.vue'
-import useAuth from '../composables/useAuth'
+import LoginForm from '@/components/LoginForm.vue'
+import useAuth from '@/composables/useAuth'
 
 const router = useRouter()
 const route = useRoute()

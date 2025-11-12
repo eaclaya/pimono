@@ -1,11 +1,11 @@
 <script setup>
 import { computed, onMounted, reactive, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import TransactionModal from './components/TransactionModal.vue'
-import TransactionsTable from './components/TransactionsTable.vue'
-import Toast from './components/Toast.vue'
-import useAuth from './composables/useAuth'
-import useTransaction from './composables/useTransaction'
+import TransactionModal from '@/components/TransactionModal.vue'
+import TransactionsTable from '@/components/TransactionsTable.vue'
+import Toast from '@/components/Toast.vue'
+import useAuth from '@/composables/useAuth'
+import useTransaction from '@/composables/useTransaction'
 
 const router = useRouter()
 const auth = useAuth()

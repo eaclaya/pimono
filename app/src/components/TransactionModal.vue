@@ -52,6 +52,7 @@ const filteredUsers = computed(() => {
 let searchDebounce
 const triggerSearch = (value) => {
   if (searchMode.value !== 'search') return
+  if (!searchTerm.value) return
   emit('search', value)
 }
 
