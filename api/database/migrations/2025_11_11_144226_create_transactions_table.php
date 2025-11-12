@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('sender_id');
             $table->unsignedBigInteger('receiver_id');
             $table->decimal('amount', 15, 4);
-            $table->decimal('commission', 15, 4);
+            $table->decimal('commission_fee', 15, 4);
             $table->timestamps();
             $table->softDeletes();
 
