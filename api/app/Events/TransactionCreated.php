@@ -2,15 +2,13 @@
 
 namespace App\Events;
 
-use Illuminate\Broadcasting\Channel;
+use App\Http\Resources\TransactionResource;
+use App\Models\Transaction;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use App\Models\Transaction;
-use App\Http\Resources\TransactionResource;
 
 class TransactionCreated implements ShouldBroadcast
 {
@@ -37,8 +35,8 @@ class TransactionCreated implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('users.' . $this->transaction->receiver_id),
-            new PrivateChannel('users.' . $this->transaction->sender_id),
+            new PrivateChannel('users.'.$this->transaction->receiver_id),
+            new PrivateChannel('users.'.$this->transaction->sender_id),
         ];
     }
 

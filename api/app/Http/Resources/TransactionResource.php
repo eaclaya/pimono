@@ -19,6 +19,7 @@ class TransactionResource extends JsonResource
             'sender' => UserResource::make($this->sender),
             'receiver' => UserResource::make($this->receiver),
             'amount' => $this->amount,
+            'commission_fee' => $this->commission_fee,
             'created_at' => $this->created_at,
         ];
     }

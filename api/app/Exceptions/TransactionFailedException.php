@@ -12,7 +12,7 @@ class TransactionFailedException extends Exception
     {
         return response()->json([
             'message' => $this->getMessage(),
-            'error' => 'transaction_failed'
+            'error' => 'transaction_failed',
         ], 500);
     }
 }

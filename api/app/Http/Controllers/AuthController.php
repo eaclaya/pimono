@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AuthLoginRequest;
@@ -6,9 +7,10 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController
 {
-	public function login(AuthLoginRequest $request) {
+    public function login(AuthLoginRequest $request)
+    {
 
-        if (!Auth::attempt($request->only('email', 'password'))) {
+        if (! Auth::attempt($request->only('email', 'password'))) {
             return response()->json([
                 'message' => 'Invalid credentials',
             ], 401);

@@ -2,13 +2,13 @@
 
 namespace App\Services;
 
-use App\Models\Transaction;
-use App\Models\User;
+use App\Events\TransactionCreated;
 use App\Exceptions\InsufficientBalanceException;
 use App\Exceptions\TransactionFailedException;
+use App\Models\Transaction;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use App\Events\TransactionCreated;
 
 class TransactionService
 {
@@ -72,7 +72,6 @@ class TransactionService
         } catch (InsufficientBalanceException $e) {
             // Re-throw validation exceptions
             throw $e;
-
         } catch (\Exception $e) {
 
             Log::error('Transaction failed', [
@@ -84,9 +83,8 @@ class TransactionService
             ]);
 
             throw new TransactionFailedException(
-                'Transaction failed: ' . $e->getMessage()
+                'Transaction failed: '.$e->getMessage()
             );
         }
     }
 }
-

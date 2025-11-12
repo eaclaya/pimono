@@ -22,7 +22,7 @@ class TransactionStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'receiver_id' => 'required|numeric|exists:users,id|different:' . auth()->id(),
+            'receiver_id' => 'required|numeric|exists:users,id|different:'.auth()->id(),
             'amount' => 'required|numeric|min:0.01',
         ];
     }

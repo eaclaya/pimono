@@ -3,10 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\TransactionStoreRequest;
-use App\Models\Transaction;
 use App\Http\Resources\TransactionResource;
+use App\Models\Transaction;
 use App\Services\TransactionService;
-use Illuminate\Support\Facades\DB;
 
 class TransactionController extends Controller
 {
@@ -18,7 +17,7 @@ class TransactionController extends Controller
             ->where('receiver_id', auth()->id())
             ->orWhere('sender_id', auth()->id())
             ->orderBy('created_at', 'desc')
-            ->paginate(10);
+            ->paginate(20);
 
         return TransactionResource::collection($transactions);
     }
