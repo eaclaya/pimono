@@ -28,11 +28,12 @@ const formatDate = (value) => {
   return date.toLocaleString()
 }
 
-const formatAmount = (value) => {
-  if (value === null || value === undefined) return '—'
-  const number = Number(value)
-  if (Number.isNaN(number)) return value
-  return new Intl.NumberFormat(undefined, {
+const formatAmount = (transaction) => {
+  if (!transaction) return '—'
+  const number = Number(transaction.amount)
+  if (Number.isNaN(number)) return transaction.amount
+  const sign = transaction.receiver.id == user.id ? '+' : '-'
+  return sign + new Intl.NumberFormat(undefined, {
     style: 'currency',
     currency: 'USD',
     minimumFractionDigits: 2,
@@ -109,8 +110,8 @@ const formatAmount = (value) => {
                   </div>
                 </td>
                 <td class="px-4 py-3 text-right font-semibold text-slate-900">
-                  {{  transaction.receiver.id == user.id ? '+' : '-' }}
-                  {{ formatAmount(transaction.amount) }}
+
+                  {{ formatAmount(transaction) }}
                 </td>
               </tr>
             </template>

@@ -20,8 +20,9 @@ const transactionModal = reactive({
   user: null,
 })
 
+let pusher = null
 
-function resetState() {
+const resetState = () => {
   recipients.value = []
   recipientsError.value = ''
   recipientsLoading.value = false
@@ -54,7 +55,7 @@ export default function useTransaction() {
     auth.logout()
   }
 
-  async function fetchUsers(options = {}) {
+  const fetchUsers = async (options = {}) => {
     if (!auth.isAuthenticated.value) return
 
     recipientsLoading.value = true
@@ -82,7 +83,7 @@ export default function useTransaction() {
     }
   }
 
-  async function fetchTransactions(params = {}) {
+  const fetchTransactions = async (params = {}) => {
     if (!auth.isAuthenticated.value) return
 
     transactionsLoading.value = true
@@ -105,10 +106,7 @@ export default function useTransaction() {
     }
   }
 
-
-  let pusher = null
-
-  function syncUserBalance(transaction) {
+  const syncUserBalance = (transaction) => {
     if (!auth.user.value || !transaction) return
 
     const currentBalance = parseFloat(auth.user.value.balance)
@@ -124,14 +122,14 @@ export default function useTransaction() {
     auth.updateUser({ balance: newBalance.toFixed(2) })
   }
 
-  function disconnectEcho() {
+  const disconnectEcho = () => {
     const echo = window.Echo
     if (echo) {
       echo.disconnect()
     }
   }
 
-  function handleIncomingTransaction(transaction) {
+  const handleIncomingTransaction = (transaction) => {
     if (!transaction) return
     const existingIndex = transactions.value.findIndex((item) => item.id === transaction.id)
     if (existingIndex >= 0) {
@@ -147,7 +145,7 @@ export default function useTransaction() {
     }
   }
 
-  function subscribe() {
+  const subscribe = () => {
     if (!auth.token.value || pusher || !auth.user.value) return
     const echo = window.Echo
     if (!echo) return
@@ -157,7 +155,6 @@ export default function useTransaction() {
       console.error('Cannot subscribe to Pusher: user ID not found in stored user data')
       return
     }
-
     const channelName = `users.${userId}`
     pusher = echo.private(channelName)
       .listen('.TransactionCreated', (payload) => {
@@ -165,7 +162,7 @@ export default function useTransaction() {
       })
   }
 
-  function unsubscribe() {
+  const unsubscribe = () => {
     if (pusher) {
       pusher.stopListening('.TransactionCreated')
       pusher = null
@@ -185,14 +182,14 @@ export default function useTransaction() {
     { immediate: true },
   )
 
-  function openTransactionModal(user) {
+  const openTransactionModal = (user) => {
     transactionModal.open = true
     transactionModal.user = user ?? null
     transactionModal.error = ''
     transactionModal.success = ''
   }
 
-  function closeTransactionModal() {
+  const closeTransactionModal = () => {
     transactionModal.open = false
     transactionModal.loading = false
     transactionModal.error = ''
@@ -200,7 +197,7 @@ export default function useTransaction() {
     transactionModal.user = null
   }
 
-  async function submitTransaction(payload) {
+  const submitTransaction = async (payload) => {
     transactionModal.loading = true
     transactionModal.error = ''
     transactionModal.success = ''
@@ -239,7 +236,7 @@ export default function useTransaction() {
   }
 }
 
-function extractAxiosMessage(error, fallback) {
+const extractAxiosMessage = (error, fallback) => {
   if (error?.response?.data?.message) return error.response.data.message
   if (error?.response?.data?.error) return error.response.data.error
   if (typeof error?.message === 'string' && error.message.length > 0) return error.message
