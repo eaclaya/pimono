@@ -109,17 +109,15 @@ export default function useTransaction() {
   const syncUserBalance = (transaction) => {
     if (!auth.user.value || !transaction) return
 
-    const currentBalance = parseFloat(auth.user.value.balance)
-    const transactionAmount = parseFloat(transaction.amount)
-    let newBalance = currentBalance
+    let newBalance = auth.user.value.balance
 
     if (transaction.sender.id == auth.user.value.id) {
-      newBalance = currentBalance - transactionAmount
+      newBalance = transaction.sender.balance
     } else if (transaction.receiver.id == auth.user.value.id) {
-      newBalance = currentBalance + transactionAmount
+      newBalance = transaction.receiver.balance
     }
 
-    auth.updateUser({ balance: newBalance.toFixed(2) })
+    auth.updateUser({ balance: newBalance })
   }
 
   const disconnectEcho = () => {
