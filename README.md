@@ -34,6 +34,10 @@ A Laravel 12 API (`api/`) paired with a Vue 3 + Vite client (`app/`). The backen
    - `APP_URL=http://127.0.0.1:8000`
    - `DB_HOST=127.0.0.1`, `DB_PORT=5432`, `DB_DATABASE=pimono`, etc.
    - `REDIS_HOST=127.0.0.1`, `REDIS_PORT=6379`
+   - **Pusher keys** (required for real-time broadcasting):
+     - `PUSHER_APP_ID`, `PUSHER_APP_KEY`, `PUSHER_APP_SECRET`, `PUSHER_APP_CLUSTER`
+     - Obtain these from [Pusher.com](https://pusher.com/) or use a Pusher-compatible service
+     - Optionally set `BROADCAST_CONNECTION=pusher` to enable broadcasting
 3. Install dependencies and bootstrap the app:
    ```bash
    composer install
@@ -60,7 +64,11 @@ A Laravel 12 API (`api/`) paired with a Vue 3 + Vite client (`app/`). The backen
    ```bash
    cp .env.example .env
    ```
-   Set `VITE_API_URL="http://127.0.0.1:8000/api/"` (or whichever host/port you used for the backend) and the Pusher keys you expect.
+   Configure:
+   - `VITE_API_URL="http://127.0.0.1:8000/api/"` (or whichever host/port you used for the backend)
+   - **Pusher keys** (must match the backend configuration):
+     - `VITE_PUSHER_APP_KEY` – Same as backend's `PUSHER_APP_KEY`
+     - `VITE_PUSHER_APP_CLUSTER` – Same as backend's `PUSHER_APP_CLUSTER`
 3. Install and run:
    ```bash
    npm install
@@ -77,7 +85,7 @@ Use Docker when you want a reproducible Linux stack for the Laravel API, Postgre
 ### Backend containers
 
 1. `cd api`
-2. Copy `.env.example` to `.env` and leave the default service hostnames (`DB_HOST=db`, `REDIS_HOST=redis`). Set `APP_URL=http://localhost:8080`.
+2. Copy `.env.example` to `.env` and leave the default service hostnames (`DB_HOST=db`, `REDIS_HOST=redis`). Set `APP_URL=http://localhost:8080`. Configure **Pusher keys** as described in the "Local Setup" section above.
 3. Build and start the stack:
    ```bash
    docker compose up --build -d
@@ -98,8 +106,8 @@ Use Docker when you want a reproducible Linux stack for the Laravel API, Postgre
 
 ### Frontend when the API runs in Docker
 
-1. Run the client locally (same steps as in “Frontend” above).
-2. Point `VITE_API_URL` to `http://localhost:8080/api/` so the SPA talks to the containerized backend.
+1. Run the client locally (same steps as in "Frontend" above).
+2. Point `VITE_API_URL` to `http://localhost:8080/api/` so the SPA talks to the containerized backend. Configure **Pusher keys** as described in the "Frontend" section above.
 3. Start Vite: `npm run dev`, then browse to `http://localhost:5173`.
 
 ---
@@ -110,3 +118,4 @@ Use Docker when you want a reproducible Linux stack for the Laravel API, Postgre
 - Linting/format (backend): `cd api && ./vendor/bin/pint`
 - Build frontend for production: `cd app && npm run build`
 - Stop Docker stack: `cd api && docker compose down`
+
