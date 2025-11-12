@@ -22,8 +22,16 @@ class TransactionStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'receiver_id' => 'required|exists:users,id',
-            'amount' => 'required|numeric|min:0',
+            'receiver_id' => 'required|numeric|exists:users,id|different:' . auth()->id(),
+            'amount' => 'required|numeric|min:0.01',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'receiver_id.different' => 'Cannot send money to yourself',
+            'amount.min' => 'Transfer amount must be greater than 0',
         ];
     }
 }

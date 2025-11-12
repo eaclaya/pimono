@@ -13,11 +13,16 @@ class Transaction extends Model
         'sender_id',
         'receiver_id',
         'amount',
+        'commission_fee',
     ];
 
-    protected $casts = [
-        'amount' => 'decimal:4',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'amount' => 'decimal:4',
+            'commission_fee' => 'decimal:4',
+        ];
+    }
 
     public function sender()
     {
